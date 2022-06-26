@@ -2,33 +2,45 @@ package main
 
 import (
 	"encoding/csv"
-	"flag"
-	"fmt"
 	"io"
 	"log"
 	"os"
 )
 
-func main() {
-	f := flag.CommandLine.String("e", "", "e")
-	flag.Parse()
-	fmt.Println(flag.Args())
-	fmt.Println(*f)
+// TODO
+// 動的な構造体の作成
+// Jsonファイル出力
+// コマンドライン引数の読み込み解析
+// 実行時のパス取得
 
-	file, err := os.Open("./test/15NIIGAT.CSV")
+func main() {
+	// 引数は後で実装
+	// f := flag.CommandLine.String("e", "", "e")
+	// flag.Parse()
+	// for i, v := range os.Args {
+	// 	fmt.Printf("args[%d] -> %s\n", i, v)
+	// }
+	// fmt.Println(*f)
+
+	csvFile, err := os.Open("./test/15NIIGAT.CSV")
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer csvFile.Close()
 
-	r := csv.NewReader(file)
+	r := csv.NewReader(csvFile)
+	firstRow, errFirstRow := r.Read()
+	if errFirstRow != nil {
+		log.Fatal(errFirstRow)
+	}
+	println(firstRow)
+
 	// []stringなのでループする
-
 	var isSkip bool = true
-
 	for {
-		row, err := r.Read() // csvを1行ずつ読み込む
+		// csvを1行ずつ読み込む
+		row, err := r.Read()
 		if isSkip {
 			// 1行目はスキップする
 			isSkip = false
